@@ -85,7 +85,7 @@ cdef class Whisper:
     cdef whisper_full_params params
 
     def __init__(self, model=DEFAULT_MODEL, pb=None):
-        model_fullname = f'ggml-{model}.bin'.encode('utf8')
+        model_fullname = f'ggml-{model}.bin'
         download_model(model_fullname)
         model_path = Path(MODELS_DIR).joinpath(model_fullname)
         cdef bytes model_b = str(model_path).encode('utf8')
@@ -102,7 +102,7 @@ cdef class Whisper:
 
         print("Transcribing..")
         return whisper_full(self.ctx, self.params, &frames[0], len(frames))
-    
+
     def extract_text(self, int res):
         print("Extracting text...")
         if res != 0:
@@ -111,5 +111,3 @@ cdef class Whisper:
         return [
             whisper_full_get_segment_text(self.ctx, i).decode() for i in range(n_segments)
         ]
-
-
